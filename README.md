@@ -5,9 +5,13 @@ backend for FIPUbot web-app: https://github.com/mvisnjic/FIPUbot
 ## How to download and install local
 
 `git clone [project name] # git clone`
+
 `cd [project name] # enter to project dir`
+
 `py -m venv venv # creating venv`
+
 `source ./venv/bin/activate #activating venv`
+
 `pip3 install -r ./requirements.txt #installing dependencies`
 
 `deactivate #leaving virtual env`
