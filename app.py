@@ -3,7 +3,6 @@ from flask_cors import CORS, cross_origin
 from requests import request
 import chatbot
 from data import chatBotData
-# train bot
 
 app = Flask(__name__)
 cors=CORS(app)

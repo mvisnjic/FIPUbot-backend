@@ -7,13 +7,20 @@ from nltk.stem import WordNetLemmatizer
 import tensorflow as tf
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Dense, Dropout
+from googletrans import Translator, constants
+from pprint import pprint
+
 nltk.download("punkt")
 nltk.download("wordnet")
+nltk.download('omw-1.4')
 
 from data import chatBotData
 
 # initializing lemmatizer to get stem of words
 lemmatizer = WordNetLemmatizer()
+#google API translator
+translator = Translator()
+
 # Each list to create
 words = []
 classes = []
@@ -22,11 +29,17 @@ doc_y = []
 # Loop through all the intents
 # tokenize each pattern and append tokens to words, the patterns and
 # the associated tag to their associated list
+
+translated_intents = []
+translated_patterns = []
+# translated_patterns = translator.translate(chatBotData["intents"]["patterns"], dest="en")
 for intent in chatBotData["intents"]:
     for pattern in intent["patterns"]:
-        tokens = nltk.word_tokenize(pattern)
+        # translate from croatian to english
+        translated_pattern = translator.translate(pattern, dest="en")
+        tokens = nltk.word_tokenize(translated_pattern.text)
         words.extend(tokens)
-        doc_X.append(pattern)
+        doc_X.append(translated_pattern.text)
         doc_y.append(intent["tag"])
 
     # add the tag to the classes if it's not there already
@@ -39,13 +52,14 @@ words = [lemmatizer.lemmatize(word.lower()) for word in words if word not in str
 words = sorted(set(words))
 classes = sorted(set(classes))
 
+print("words: ")
 print(words)
-
+print("classes: ")
 print(classes)
-
+print("docX: ")
 print(doc_X)
-
-print(doc_y)
+print("docY(tagg): ")
+print(doc_y)    
 
 # list for training data
 training = []
@@ -85,7 +99,7 @@ model.compile(loss='categorical_crossentropy',
               optimizer=adam,
               metrics=["accuracy"])
 print(model.summary())
-model.fit(x=train_X, y=train_y, epochs=200, verbose=1)
+model.fit(x=train_X, y=train_y, epochs=500, verbose=1)
 
 
 def clean_text(text):
@@ -105,7 +119,8 @@ def bag_of_words(text, vocab):
 
 
 def pred_class(text, vocab, labels):
-  bow = bag_of_words(text, vocab)
+  translated_text = translator.translate(text, dest="en")
+  bow = bag_of_words(translated_text.text, vocab)
   result = model.predict(np.array([bow]))[0]
   thresh = 0.2
   y_pred = [[idx, res] for idx, res in enumerate(result) if res > thresh]
@@ -116,7 +131,9 @@ def pred_class(text, vocab, labels):
     return_list.append(labels[r[0]])
   return return_list
 
-
+def translate_to_hr(word):
+  return translator.translate(word, dest="hr")
+  
 def get_response(intents_list, intents_json):
   tag = intents_list[0]
   list_of_intents = intents_json["intents"]
