@@ -5,8 +5,8 @@ import nltk
 import numpy as np
 from nltk.stem import WordNetLemmatizer
 import tensorflow as tf
-from tensorflow.keras import Sequential
-from tensorflow.keras.layers import Dense, Dropout
+from keras import Sequential
+from keras.layers import Dense, Dropout
 from googletrans import Translator, constants
 from pprint import pprint
 
@@ -99,7 +99,7 @@ model.compile(loss='categorical_crossentropy',
               optimizer=adam,
               metrics=["accuracy"])
 print(model.summary())
-model.fit(x=train_X, y=train_y, epochs=500, verbose=1)
+model.fit(x=train_X, y=train_y, epochs=epochs, verbose=1)
 
 
 def clean_text(text):

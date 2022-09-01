@@ -1,14 +1,14 @@
 chatBotData = {"intents": [
              {"tag": "greeting",
-              "patterns": ["Dobar dan", "vecer","jutro", "Kako si?", "Ej", "Cao", "Hej", "bok", "pozdrav", "hi", "hello", "alo"],
+              "patterns": ["Dobar dan", "vecer","jutro", "Kako si?", "Ej", "Cao", "hej", "bok", "pozdrav", "hi", "hello", "alo"],
               "responses": ["Pozdrav!", "Bok!", "Pozdrav. Kako ste, sta ima?","Pozdrav. Sto ima kod vas?","Bok, kako je?"],
              },
              {"tag": "request",
-              "patterns": ["Trebam nesto", "Imam pitanje","Zelio bi znati", "Zelim znati", "Gdje"],
+              "patterns": ["Trebam nesto", "Imam pitanje","Zelio bi znati", "Zelim znati", "Imam nekoliko pitanja", "Zanima me nešto"],
               "responses": ["Slobodno pitajte.", "Slušam...", "Pretvorio sam se u uho."],
              },
              {"tag": "age",
-              "patterns": ["Koliko si star?", "Kada je tvoj rodendan?", "Kada si roden?"],
+              "patterns": ["Koliko si star?", "Kada je tvoj rodendan?", "Kada si roden?", "Kada si nastao?"],
               "responses": ["Sta mislis?", "Roden sam kao ideja za zavrsni rad.", "Nemam rodendan."]
              },
              {"tag": "date",
@@ -17,16 +17,30 @@ chatBotData = {"intents": [
                             "Nemam nikakvih planova", 
                             "Nisam zauzet"]
              },
+             {"tag": "fun",
+              "patterns": ["Gdje mogu izaći u Puli?", "Izlasci pula", "Kamo mogu izaci?"],
+              "responses": ["Cargo, Pietas, Uljanik, Rustico, Stella... za ostalo pretraži Google :)"] 
+                            
+             },
              {"tag": "feelings",
               "patterns": ["Kako si ti", "kako ste?", "Sta radis?","Sta ima", "Sa ima", "kako si?", "kod tebe?"],
               "responses": ["Ja sam dobro", 
                             "Nemam nikakvih planova", 
                             "Nisam zauzet"]
              },
+             {"tag": "gratefulness",
+              "patterns": ["Hvala", "hvala na odgovoru"],
+              "responses": ["Molim. Imaš još kakvo pitanje?", 
+                            "Hvala tebi."]
+             },
+             {"tag": "random",
+              "patterns": ["nisam ni mislio", "nisam ni mislio da si", "ne mislim", "nemas pojma", "ne kuzis nis", "ne razumijes nista"],
+              "responses": ["U redu. :)"]
+             },
              {"tag": "feelings-answer",
               "patterns": ["Super ti?", "Dobro sam", "Odlicno sam", "Evo uzivam", "Ja sam dobro", "Osjecam se super", "evo nista", "nista"],
               "responses": ["Bas mi je drago.", 
-                            "Drago mi je zbog tebe.", ""]
+                            "Drago mi je zbog tebe."]
              },
              {"tag": "action",
               "patterns": ["S cime se bavis?", "Koji je tvoj posao?", "a tvoj posao je"],
@@ -35,7 +49,7 @@ chatBotData = {"intents": [
                             "Odgovaram na tvoja dosadna pitanja. :D"]
              },
              {"tag": "name",
-              "patterns": ["Kako se zoves?", "Kako te zovu?", "Ko si ti?", "Tvoje ime?", "Ime?"],
+              "patterns": ["Kako se zoves?", "Ko si ti?", "Tvoje ime?"],
               "responses": ["Moje ime je FIPUbot.", 
                             "Ja sam FIPUbot", 
                             "FIPUbot"]
@@ -50,15 +64,23 @@ chatBotData = {"intents": [
                             "Ukoliko nesto trebas, javi se opet"]
              },
              {"tag": "fail",
-              "patterns": [ "g2g", "?", "kwekfowe", "jnwcwoiacjoiawcjoiwa", "@~ˇ^˘°`˙´¨˝´˙`˛°", "ahahahahhahah"],
+              "patterns": [ "?", "kwekfowe", "jnwcwoiacjoiawcjoiwa", "@~ˇ^˘°`˙´¨˝´˙`˛°", "ahahahahhahah", "ok", "bo", "gledaj svoja posla"],
               "responses": ["Bilo je lijepo razgovarati sa Vama.", 
                             "Čujemo se kasnije.", 
                             "Probajte smisliti bolji upit!"]
              },
+             {"tag": "bad-words",
+              "patterns": [ "jebem ti mater", "jebi se", "jebem", "ti mater", "jebem ti sve", "kurac", "kita", "picka", "supak", "govno", "sranje", "guzica"],
+              "responses": ["To nije lijepo. :)"]
+             },
+             {"tag": "lol",
+              "patterns": ["lol"],
+              "responses": ["Misliš, laugh out loud? :)"] 
+             },
              {"tag": "jokes",
               "patterns": [ "moze vic?", "vic", "ispricaj mi vic", "vicevi"],
-              "responses": ["`Pužu tri pijanca prugom. Kaže prvi: - Što su duge ove stpenice. Kaze drugi: - Nikad nećemo stići. Kaže treći: - Ne brinite se, evo lifta.`", 
-                            "- Koja je razlika između komarca i žene? - Komarac te živcira samo ljeti.", 
+              "responses": ["Pužu tri pijanca prugom. Kaže prvi: -Što su duge ove stpenice. Kaze drugi: -Nikad nećemo stići. Kaže treći: -Ne brinite se, evo lifta.", 
+                            "Koja je razlika između komarca i žene? -Komarac te živcira samo ljeti.", 
                             "Idu dva policajca ulicom i jedan upadne u šaht, ovaj drugi mu pomaže da izađe, pa mu reče: - Dobro pa je bila otvorena, inače ne znam kako bih te izvukao.",
                             "Ugleda mali Perica policajca koji jede bananu pa mu kaže: - Daj griz? Policajac mu odgovori: - Ovo nije griz, tupane, to je banana.",
                             "Pita Haso Muju: - Kako se konj drži u neizvijesnosti? Mujo odgovori: - Ne znam, reci mi ti. Haso: - Reći ću ti sutra.",
