@@ -1,4 +1,3 @@
-import json
 import string
 import random
 import nltk
@@ -7,19 +6,21 @@ from nltk.stem import WordNetLemmatizer
 import tensorflow as tf
 from keras import Sequential
 from keras.layers import Dense, Dropout
-from googletrans import Translator, constants
-from pprint import pprint
+from googletrans import Translator
+from dataEngPatterns import chatBotData
+
+
 
 nltk.download("punkt")
 nltk.download("wordnet")
 nltk.download('omw-1.4')
-
-from data import chatBotData
-
 # initializing lemmatizer to get stem of words
 lemmatizer = WordNetLemmatizer()
+
 #google API translator
-translator = Translator()
+translator = Translator(service_urls=[
+      'translate.google.com',
+    ])
 
 # Each list to create
 words = []
@@ -29,17 +30,11 @@ doc_y = []
 # Loop through all the intents
 # tokenize each pattern and append tokens to words, the patterns and
 # the associated tag to their associated list
-
-translated_intents = []
-translated_patterns = []
-# translated_patterns = translator.translate(chatBotData["intents"]["patterns"], dest="en")
 for intent in chatBotData["intents"]:
     for pattern in intent["patterns"]:
-        # translate from croatian to english
-        translated_pattern = translator.translate(pattern, dest="en")
-        tokens = nltk.word_tokenize(translated_pattern.text)
+        tokens = nltk.word_tokenize(pattern)
         words.extend(tokens)
-        doc_X.append(translated_pattern.text)
+        doc_X.append(pattern)
         doc_y.append(intent["tag"])
 
     # add the tag to the classes if it's not there already
@@ -51,15 +46,6 @@ words = [lemmatizer.lemmatize(word.lower()) for word in words if word not in str
 # sorting the vocab and classes in alphabetical order and taking the # set to ensure no duplicates occur
 words = sorted(set(words))
 classes = sorted(set(classes))
-
-print("words: ")
-print(words)
-print("classes: ")
-print(classes)
-print("docX: ")
-print(doc_X)
-print("docY(tagg): ")
-print(doc_y)    
 
 # list for training data
 training = []
@@ -101,12 +87,10 @@ model.compile(loss='categorical_crossentropy',
 print(model.summary())
 model.fit(x=train_X, y=train_y, epochs=epochs, verbose=1)
 
-
 def clean_text(text):
   tokens = nltk.word_tokenize(text)
   tokens = [lemmatizer.lemmatize(word) for word in tokens]
   return tokens
-
 
 def bag_of_words(text, vocab):
   tokens = clean_text(text)
@@ -117,10 +101,11 @@ def bag_of_words(text, vocab):
         bow[idx] = 1
   return np.array(bow)
 
-
 def pred_class(text, vocab, labels):
   translated_text = translator.translate(text, dest="en")
-  bow = bag_of_words(translated_text.text, vocab)
+  lower_text = translated_text.text.lower()
+  
+  bow = bag_of_words(lower_text, vocab)
   result = model.predict(np.array([bow]))[0]
   thresh = 0.2
   y_pred = [[idx, res] for idx, res in enumerate(result) if res > thresh]
@@ -130,9 +115,6 @@ def pred_class(text, vocab, labels):
   for r in y_pred:
     return_list.append(labels[r[0]])
   return return_list
-
-def translate_to_hr(word):
-  return translator.translate(word, dest="hr")
   
 def get_response(intents_list, intents_json):
   tag = intents_list[0]

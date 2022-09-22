@@ -1,11 +1,9 @@
 from flask import Flask, request
 from flask import request
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from flask_mail import Mail, Message
 from flask import Response
 import chatbot
-from data import chatBotData
-# from requests import request
 import os
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
@@ -14,12 +12,11 @@ app = Flask(__name__)
 cors=CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-@app.route("/getanswer/<name>", methods=['GET'])
-def getAnswer(name):
-        # print(name)
-        message = name
+@app.route("/getanswer/<question>", methods=['GET'])
+def getAnswer(question):
+        message = question.lower()
         intents = chatbot.pred_class(message, chatbot.words, chatbot.classes)
-        result = chatbot.get_response(intents, chatBotData)
+        result = chatbot.get_response(intents, chatbot.chatBotData)
         return result
 
 # dotenv secured data
@@ -52,3 +49,6 @@ def sendmail():
                 return 'Message sent!'
         except Exception as e:
                 return Response("Fail! Try again later.", status=404, mimetype='application/json')
+
+if(__name__ == '__main__'):
+        app.run(debug=False, use_reloader=False)
